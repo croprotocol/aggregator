@@ -4,21 +4,48 @@
 
 ## ✨ Features
 
-- Aggregated access to Sui-based DeFi protocols
-- Seamless lending and swapping through unified interface
-- Points-based reward system to incentivize user activity
-- Integrates with key protocols (e.g. Navi, Scallop, Kai)
-- Built with Move smart contracts and Sui SDK
+- Aggregated access to Sui-based DeFi protocols  
+- Seamless lending and swapping through unified interface  
+- Points-based reward system to incentivize user activity  
+- Integrated with top protocols (e.g. Navi, Scallop, Kai)  
+- Built with Move smart contracts and Sui SDK  
 
-## 🚀 SDK
+---
+
+## 🧰 SDK
 
 To help developers integrate with Cro Ag easily, we provide a TypeScript SDK.
 
 - 📦 NPM Package: [cro-sdk](https://www.npmjs.com/package/cro-sdk)
 - 📥 Install:
-  
-  ```bash
-  npm i cro-sdk
+
+```bash
+npm i cro-sdk
+```
+
+---
+
+## 🌐 Web Usage
+
+Clone the repository and run the frontend locally:
+
+```bash
+pnpm i         # install dependencies  
+pnpm run dev   # start dev server  
+pnpm run build # production build
+```
+
+---
+
+## 📦 Move Contracts
+
+Smart contracts are built with Sui Move. To build Move modules:
+
+```bash
+sui move build
+```
+
+---
 
 ## 📫 Join the Community
 
@@ -26,4 +53,6 @@ To help developers integrate with Cro Ag easily, we provide a TypeScript SDK.
 - 🐦 Twitter: [@cro_aggregator](https://x.com/cro_aggregator)
 - 💬 Discord: [Join Us](https://discord.com/invite/UG6c7nXr5X)
 
-Built with ❤️ by Crater Lab
+---
+
+> Built with ❤️ by Crater Lab  
