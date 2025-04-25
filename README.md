@@ -22,8 +22,8 @@ To help developers integrate with Cro Ag easily, we provide a TypeScript SDK.
 
 ## 📫 Join the Community
 
-🌐 Website: [cro.ag](https://cro.ag)
-🐦 Twitter: [@cro_aggregator](https://x.com/cro_aggregator)
-💬 Discord: [Join Us](https://discord.com/invite/UG6c7nXr5X)
+- 🌐 Website: [cro.ag](https://cro.ag)
+- 🐦 Twitter: [@cro_aggregator](https://x.com/cro_aggregator)
+- 💬 Discord: [Join Us](https://discord.com/invite/UG6c7nXr5X)
 
 Built with ❤️ by Crater Lab
