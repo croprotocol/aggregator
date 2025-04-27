@@ -1,6 +1,6 @@
 # Cro Ag
 
-**Cro Ag** is a Web3 super aggregator built on the **Sui** blockchain, providing users with unified access to multiple DeFi protocols, including **Lending** and **Swap** features. Our mission is to make DeFi on Sui more accessible, efficient, and powerful by abstracting away complexities and integrating key protocols like Scallop and Kai Finance.
+**Cro Ag** is a Web3 super aggregator built on the **Sui** blockchain, providing users with unified access to multiple DeFi protocols, including **Lending** and **Swap** features. Our mission is to make DeFi on Sui more accessible, efficient, and powerful by abstracting away complexities and integrating key protocols.
 
 ## ✨ Features
 
