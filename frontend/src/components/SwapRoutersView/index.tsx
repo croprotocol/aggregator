@@ -27,14 +27,13 @@ export type SwapRoutersProps = {
 };
 
 const SwapRoutersView: React.FC<SwapRoutersProps> = (props) => {
-  // console.log('^^^^^^^^^^^^^^^^^ ');
   const [position, setPosition] = useState(0);
   const onItem = (position: number) => {
     props.onItemClick?.(position);
     setPosition(position);
   };
   const isTabletOrMobile = useTabletOrMobile();
-  const ratio = useTabletOrMobile() ? 4 / 5 : 1;
+  const ratio = useTabletOrMobile() ? 5 / 6 : 1;
   const { ref, inView } = useInView({
     threshold: 0.2, // **** 50% ***，********
     triggerOnce: false, // ************* true

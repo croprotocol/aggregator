@@ -45,12 +45,18 @@ const DepositView: React.FC = () => {
   };
   const [lendingState, setLendingState] = useState('loading');
   const [showModal, setShowModal] = useState(false); //Deposit ******
-  const [reallyValue, setReallyValue] = useState(0);
-  const [reallyValueBigint, setReallyValueBigint] = useState(0n);
-  const resultBalanceRef = useRef(0n);
+  const [reallyValue, setReallyValue] = useState<number | undefined>(undefined);
+  const [reallyValueBigint, setReallyValueBigint] = useState<
+    bigint | undefined
+  >(undefined);
+  const resultBalanceRef = useRef<bigint | undefined>(undefined);
 
   const onDSViewChange = useCallback(
-    (reallyVB: bigint, value: number, resultBalance: bigint) => {
+    (
+      reallyVB: bigint | undefined,
+      value: number | undefined,
+      resultBalance: bigint | undefined
+    ) => {
       setReallyValue(value);
       setReallyValueBigint(reallyVB);
       resultBalanceRef.current = resultBalance;
@@ -72,7 +78,7 @@ const DepositView: React.FC = () => {
       !apyDataItem ||
       !currentAccount ||
       !currentCoin.coinLendingIn.type ||
-      reallyValue <= 0 ||
+      (reallyValue == undefined ? 0 : reallyValue) <= 0 ||
       !txRef.current ||
       signTx.isPending ||
       lendingState !== 'success'
@@ -117,7 +123,7 @@ const DepositView: React.FC = () => {
             setQueryData_balanceByType(
               queryClient,
               currentCoin.coinLendingIn.type,
-              resultBalanceRef.current,
+              resultBalanceRef.current || 0n,
               currentAccount?.address
             );
           }
@@ -162,7 +168,7 @@ const DepositView: React.FC = () => {
                     !apyDataItem ||
                     !currentAccount ||
                     !currentCoin.coinLendingIn.type ||
-                    reallyValue <= 0 ||
+                    (reallyValue == undefined ? 0 : reallyValue) <= 0 ||
                     lendingState !== 'success'
                       ? '#9a94cf'
                       : '#6072fd',
@@ -288,7 +294,7 @@ const DepositView: React.FC = () => {
           amount={String(reallyValue)}
           decimals={currentCoin.coinLendingIn?.decimals}
           refetchInterval={!signTx.isPending}
-          reallyValueBigint={reallyValueBigint}
+          reallyValueBigint={reallyValueBigint || 0n}
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           onState={(value) => {
             setLendingState(value);

@@ -2,7 +2,7 @@ import stringUtil from '@/utils/stringUtil';
 import { ConfigProvider, InputNumber, InputNumberProps } from 'antd';
 import React, { useRef, useState } from 'react';
 export type ApyListProps = {
-  currentValue: number;
+  currentValue: number | undefined;
   maxBalance: number;
   decimalPlaces: number;
   onInputChange: (value: number | null) => void;
@@ -48,6 +48,7 @@ const NumInput: React.FC<ApyListProps> = ({
       theme={{
         components: {
           InputNumber: {
+            colorTextPlaceholder: '#c1c1c1',
             hoverBorderColor: '#00000000',
             hoverBg: '#00000000',
             activeBg: '#00000000',
@@ -71,6 +72,7 @@ const NumInput: React.FC<ApyListProps> = ({
         <InputNumber<number>
           disabled={disabled}
           min={0}
+          placeholder={'0'}
           max={maxBalance}
           defaultValue={0}
           controls={false}
@@ -107,4 +109,4 @@ const NumInput: React.FC<ApyListProps> = ({
   );
 };
 
-export default NumInput;
+export default React.memo(NumInput);

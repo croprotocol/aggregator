@@ -1,3 +1,6 @@
+import { useAllBalance } from '@/hooks';
+import { useCurrentAccount } from '@mysten/dapp-kit';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 const Home = () => {
   // ****
@@ -5,7 +8,18 @@ const Home = () => {
 
   const toRedux = () => router('/toolkit');
   const toQuery = () => router('/query');
-
+  const currentAccount = useCurrentAccount();
+  const all = useAllBalance(currentAccount?.address);
+  const [balances, setBalances] = useState<Record<string, bigint>>({});
+  useEffect(() => {
+    if (all.isSuccess && Array.isArray(all.data)) {
+      const mapped = all.data.reduce((acc, item) => {
+        acc[item.coinType] = item.balance;
+        return acc;
+      }, {} as Record<string, bigint>);
+      setBalances(mapped);
+    }
+  }, [all, currentAccount?.address]);
   return (
     <>
       <div>home *</div>
@@ -14,6 +28,14 @@ const Home = () => {
       <br />
       <br />
       <button onClick={toQuery}>**react-queryDemo</button>
+      <div style={{ background: '#ffffff' }}>
+        <h2>My Coin Balances:</h2>
+        {Object.entries(balances).map(([coinType, balance]) => (
+          <div key={coinType}>
+            <strong>{coinType}</strong>: {balance.toString()}
+          </div>
+        ))}
+      </div>
     </>
   );
 };

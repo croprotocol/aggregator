@@ -28,7 +28,7 @@ export type LendingRoutersProps = {
 };
 
 const LendingRouters: React.FC<LendingRoutersProps> = (props) => {
-  const ratio = useTabletOrMobile() ? 4 / 5 : 1;
+  const ratio = useTabletOrMobile() ? 5 / 6 : 1;
   const { ref, inView } = useInView({
     threshold: 0.2, // **** 50% ***，********
     triggerOnce: false, // ************* true

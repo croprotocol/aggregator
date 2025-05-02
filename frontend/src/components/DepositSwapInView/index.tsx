@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './index.module.scss';
 import { ConfigProvider, Flex, InputNumberProps, Slider } from 'antd';
@@ -20,28 +20,29 @@ export type DepositSwapViewProps = {
   viewType: CurrentCoinBtnType;
   initValue: number;
   onDSViewChange: (
-    reallyValueBigint: bigint,
-    reallyValue: number,
-    resultBalance: bigint
+    reallyValueBigint: bigint | undefined,
+    reallyValue: number | undefined,
+    resultBalance: bigint | undefined
   ) => void;
-  onRealTimeChange: (value: number) => void;
+  onRealTimeChange: (value: number | undefined) => void;
 };
 const DepositSwapView: React.FC<DepositSwapViewProps> = (props) => {
-  console.log('^^^^^^^^^^^^^^^^^ ');
   const currentAccount = useCurrentAccount();
   const lastUpdatedBy = useRef<'input' | 'slider' | null>(null);
   const currentCoin = useAppSelector(currentCoinType);
   const selectBalance = useBalanceByType(
     coinByCons(props.viewType, currentCoin)?.type
   );
-  const [_inputValue, setInputValue] = useState(0);
+  const [_inputValue, setInputValue] = useState<number | undefined>(undefined);
   const [reallyValue] = useDebounce(_inputValue, 500);
-  const onInputChange: InputNumberProps['onChange'] = (value) => {
+  const onInputChange = useCallback((value: number | null) => {
     if (stringUtil.isNotEmpty(value)) {
-      setInput(value as number, true);
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      setInput(value!, true);
+    } else {
+      setInput(undefined, true);
     }
-  };
-
+  }, []);
   const [maxBalance, setMaxBalance] = useState(
     new Decimal(Number.MAX_SAFE_INTEGER.toString())
       .div(
@@ -90,7 +91,7 @@ const DepositSwapView: React.FC<DepositSwapViewProps> = (props) => {
       );
     }
   }, [currentCoin]);
-  const setInput = (value: number, voluntarily: boolean) => {
+  const setInput = (value: number | undefined, voluntarily: boolean) => {
     if (lastUpdatedBy.current === 'input' && !voluntarily) {
       return;
     }
@@ -153,7 +154,9 @@ const DepositSwapView: React.FC<DepositSwapViewProps> = (props) => {
     setInput(v >= maxBalance ? maxBalance : v, false);
   }, [sliderValue]);
   useEffect(() => {
-    if (_inputValue >= maxBalance) {
+    if (_inputValue == undefined) {
+      setSlider(0, false);
+    } else if (_inputValue >= maxBalance) {
       setSlider(100, false);
     } else {
       setSlider(Number(((_inputValue / maxBalance) * 100).toFixed(2)), false);
@@ -162,19 +165,20 @@ const DepositSwapView: React.FC<DepositSwapViewProps> = (props) => {
   const onHalfMaxClick = (value: number) => {
     setSlider(value, true);
   };
-  const reallyVB = !selectBalance?.data?.decimals
-    ? 0n
-    : convertToBigInt(selectBalance?.data?.decimals, String(reallyValue));
+  const reallyVB =
+    selectBalance?.data?.decimals == undefined
+      ? 0n
+      : convertToBigInt(selectBalance?.data?.decimals, String(reallyValue));
   useEffect(() => {
     if (
       reallyValue === maxBalance &&
       coinByCons(props.viewType, currentCoin)?.type !== SUI
     ) {
       props.onDSViewChange(
-        selectBalance?.data?.balance || 0n,
+        selectBalance?.data?.balance,
         reallyValue,
         selectBalance?.data?.decimals == undefined
-          ? 0n
+          ? undefined
           : selectBalance?.data?.balance - reallyVB
       );
     } else {
@@ -182,7 +186,7 @@ const DepositSwapView: React.FC<DepositSwapViewProps> = (props) => {
         reallyVB,
         reallyValue,
         selectBalance?.data?.decimals == undefined
-          ? 0n
+          ? undefined
           : selectBalance?.data?.balance - reallyVB
       );
     }
@@ -192,7 +196,7 @@ const DepositSwapView: React.FC<DepositSwapViewProps> = (props) => {
       <Flex vertical={false} align="center">
         <SelectCoinBtn
           onComplete={() => {
-            props.onDSViewChange(0n, 0, 0n);
+            props.onDSViewChange(undefined, undefined, undefined);
           }}
           btnType={props.viewType}
         ></SelectCoinBtn>

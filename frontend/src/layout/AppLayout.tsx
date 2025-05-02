@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Avatar,
   ConfigProvider,
+  Drawer,
   Flex,
   Layout,
   Menu,
   MenuProps,
   Modal,
+  Space,
+  Spin,
 } from 'antd';
 import bg_home from '@/assets/bg_home.png';
 import icon_book from '@/assets/icon_book.svg';
@@ -25,6 +28,10 @@ import {
 } from '@mysten/dapp-kit';
 import { useFetchQueryCoinsShow } from '@/hooks/useCoinsShow';
 import Decimal from 'decimal.js';
+import { LeftCircleOutlined, LoadingOutlined } from '@ant-design/icons';
+import { ICON_URL } from '@/config/iconDefaultUrl';
+import { useAllBalance } from '@/hooks';
+import { DrawerAllBalance } from '@/components';
 
 const cx = classNames.bind(styles);
 const { Header, Content, Footer } = Layout;
@@ -120,6 +127,20 @@ const items: MenuItem[] = [
     ),
     key: 'cSui',
   },
+  // {
+  //   label: (
+  //     <Flex
+  //       gap={14}
+  //       style={{
+  //         fontFamily: 'Bold, serif',
+  //         letterSpacing: '2px',
+  //       }}
+  //     >
+  //       test
+  //     </Flex>
+  //   ),
+  //   key: 'test',
+  // },
 ];
 
 const AppLayout: React.FC = () => {
@@ -148,12 +169,16 @@ const AppLayout: React.FC = () => {
     if (current !== 'cSui') {
       setCurrent('cSui');
     }
+  } else if ('/test' === location.pathname) {
+    if (current !== 'test') {
+      setCurrent('test');
+    }
   }
   const onClick: MenuProps['onClick'] = (e) => {
     if ('Lending' === e.key) {
       toRedux();
     } else if ('test' === e.key) {
-      router('/home');
+      router('/test');
     } else if ('Swap' === e.key) {
       router('/swap');
     } else if ('Nft' === e.key) {
@@ -217,8 +242,23 @@ const AppLayout: React.FC = () => {
     // *******
     // window.location.href = 'https://example.com';
   };
+  const [open, setOpen] = useState(true);
+  const [open1, setOpen1] = useState(false);
+  const handleAfterOpenChange = (visible: boolean) => {
+    if (!visible) {
+      setOpen1(true);
+    }
+  };
+  const handleAfterOpenChange1 = useCallback(() => {
+    (visible: boolean) => {
+      if (!visible) {
+        setOpen(true);
+      }
+    };
+  }, []);
   return (
     <Layout
+      className={cx('hide-scrollbar')}
       style={{
         height: '100%',
         width: '100%',
@@ -378,9 +418,53 @@ const AppLayout: React.FC = () => {
         style={{
           padding: 0,
           height: '100%',
-          backgroundColor: '#00000000',
+          backgroundColor: '#ffffff00',
         }}
       >
+        {/* <Drawer
+          className={cx('wallet')}
+          rootStyle={{
+            boxShadow: 'none !important',
+            height: '70px',
+            zIndex: 100,
+            borderRadius: '8px',
+          }}
+          closeIcon={false}
+          mask={false}
+          maskClosable={false}
+          placement={'left'}
+          width={26}
+          open={open}
+          footer={false}
+          bodyStyle={{
+            overflow: 'hidden !important', // 禁用滚动条
+            padding: 0,
+          }}
+          afterOpenChange={handleAfterOpenChange}
+        >
+          <div
+            className={cx('drawer-content')}
+            onClick={() => {
+              setOpen(false);
+            }}
+          >
+            <div
+              style={{
+                height: '15px',
+                width: '17.5px',
+                backgroundImage: `url(${icon_wallet})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                flexShrink: 0,
+              }}
+            ></div>
+          </div>
+        </Drawer>
+        <DrawerAllBalance
+          afterOpenChange={handleAfterOpenChange1}
+          open={open1}
+        ></DrawerAllBalance> */}
         <Outlet />
       </Content>
       <Footer

@@ -28,18 +28,18 @@ const StakeContent: React.FC = () => {
   const isTabletOrMobile = useTabletOrMobile();
   const [showModal, setShowModal] = useState(false);
   // const txRef = useRef<Transaction>();
-  const [reallyValue, setReallyValue] = useState(0);
-  const [reallyValueBigint, setReallyValueBigint] = useState(0n)
-const onDSViewChange = useCallback((reallyVB: bigint, value: number) => {
+  const [reallyValue, setReallyValue] = useState<number | undefined>(undefined);
+  const [reallyValueBigint, setReallyValueBigint] = useState<bigint | undefined>(undefined)
+const onDSViewChange = useCallback((reallyVB: bigint | undefined, value: number | undefined) => {
   setReallyValue(value);
-  setReallyValueBigint(reallyValueBigint);
+  setReallyValueBigint(reallyVB);
   }, []);
-  const cSuiBalance = useSuiToCSuiPrice(reallyValue, reallyValueBigint, currentAccount?.address)
+  const cSuiBalance = useSuiToCSuiPrice(reallyValue || 0, reallyValueBigint || 0n, currentAccount?.address)
   const checkSubmitAble = (): boolean => {
     return (
       !!currentCoin?.coinStakeIn?.type &&
       !!currentCoin?.coinStakeOut?.type &&
-      reallyValue > 0 &&
+      (reallyValue == undefined ? 0 : reallyValue) > 0 &&
       !!currentAccount &&
       cSuiBalance.isSuccess &&
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
