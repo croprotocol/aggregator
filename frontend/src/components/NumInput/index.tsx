@@ -4,6 +4,7 @@ import React, { useRef, useState } from 'react';
 export type ApyListProps = {
   currentValue: number | undefined;
   maxBalance: number;
+  maxBalanceAbled: boolean;
   decimalPlaces: number;
   onInputChange: (value: number | null) => void;
   disabled?: boolean;
@@ -11,6 +12,7 @@ export type ApyListProps = {
 const NumInput: React.FC<ApyListProps> = ({
   currentValue,
   maxBalance,
+  maxBalanceAbled,
   decimalPlaces,
   onInputChange,
   disabled,
@@ -73,7 +75,8 @@ const NumInput: React.FC<ApyListProps> = ({
           disabled={disabled}
           min={0}
           placeholder={'0'}
-          max={maxBalance}
+          max={maxBalanceAbled ? maxBalance : Number.MAX_SAFE_INTEGER}
+          // max={Number.MAX_SAFE_INTEGER}
           defaultValue={0}
           controls={false}
           onChange={onInputChange1}

@@ -44,10 +44,11 @@ const LendingRouters: React.FC<LendingRoutersProps> = (props) => {
     props.refetchInterval,
     props.apyDataItem
   );
-  const targetBalance = formatBalance(
-    swapRouters.data?.[0].routerData.target.amount,
-    props.target.decimals
-  );
+  const targetBalance =
+    formatBalance(
+      swapRouters.data?.[0].routerData.target.amount,
+      props.target.decimals
+    ) || '';
   useUpdateEffect(() => {
     if (swapRouters.isSuccess) {
       props.onState('success');
@@ -67,7 +68,7 @@ const LendingRouters: React.FC<LendingRoutersProps> = (props) => {
       {swapRouters.isLoading && (
         <div
           style={{
-            marginTop: '30px',
+            marginTop: '38px',
             flex: 1,
             display: 'flex',
             flexDirection: 'column',
@@ -86,7 +87,19 @@ const LendingRouters: React.FC<LendingRoutersProps> = (props) => {
           </ConfigProvider>
         </div>
       )}
-      {swapRouters.isError && <div>error</div>}
+      {swapRouters.isError && (
+        <div
+          style={{
+            marginTop: '17px',
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center ',
+          }}
+        >
+          error
+        </div>
+      )}
       {swapRouters.isSuccess && (
         <>
           <div className={cx('bottom')}>

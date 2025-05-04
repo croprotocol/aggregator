@@ -350,7 +350,7 @@ const SelectCoinBtn: React.FC<SelectCoinBtnProps> = ({
                 {formatBalance(
                   searchBalance?.data?.balance,
                   searchBalance?.data?.decimals || 0
-                )}
+                ) || ''}
               </div>
             </Flex>
           )}

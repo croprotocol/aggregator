@@ -1,7 +1,7 @@
 export function formatBalance(
   balance: bigint | undefined,
   decimals: number | undefined
-): string {
+): string | undefined {
   if (balance !== undefined && decimals !== undefined) {
     const factor = BigInt(Math.pow(10, decimals));
     const integerPart = balance / factor; // ****
@@ -16,7 +16,7 @@ export function formatBalance(
       .replace(/\.0*$/, '');
     return balanceFormat;
   } else {
-    return '';
+    return undefined;
   }
 }
 export function convertToBigInt(decimals: number, value: string): bigint {

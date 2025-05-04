@@ -69,10 +69,9 @@ const WithdrawView: React.FC = () => {
     }
   }, []);
   const formatBalanceMax = () => {
-    const balanceMax = formatBalance(
-      croPortfolioItem?.totalBalance,
-      selectedCion?.decimals
-    );
+    const balanceMax =
+      formatBalance(croPortfolioItem?.totalBalance, selectedCion?.decimals) ||
+      '';
     if (stringUtil.isEmpty(balanceMax)) {
       return Number.MAX_SAFE_INTEGER;
     } else {
@@ -93,10 +92,9 @@ const WithdrawView: React.FC = () => {
     ) {
       return;
     }
-    const formatTotal = formatBalance(
-      croPortfolioItem?.totalBalance,
-      selectedCion?.decimals
-    );
+    const formatTotal =
+      formatBalance(croPortfolioItem?.totalBalance, selectedCion?.decimals) ||
+      '';
     const v = Number(formatTotal);
     lastUpdatedBy.current = 'input';
     setInputValue(v >= maxBalance ? maxBalance : v);
@@ -123,7 +121,7 @@ const WithdrawView: React.FC = () => {
             formatBalance(
               croPortfolioItem?.totalBalance,
               selectedCion?.decimals
-            )
+            ) || ''
           )) /
         100
       ).toFixed(selectedCion?.decimals)
@@ -249,6 +247,7 @@ const WithdrawView: React.FC = () => {
             currentValue={_inputValue}
             onInputChange={onInputChange}
             maxBalance={maxBalance}
+            maxBalanceAbled={true}
             disabled={!currentAccount}
             decimalPlaces={selectedCion?.decimals || 0}
           />

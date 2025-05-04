@@ -14,3 +14,4 @@ export { useZeroObj } from './useZeroObj';
 export { useNftTop } from './useNftTop';
 export { useNftAddPoints } from './useNftAddPoints';
 export { useAllBalance } from './useAllBalance';
+export { useCoinsPrice } from './useCoinsPrice';

@@ -27,16 +27,20 @@ const UnStakeContent: React.FC = () => {
   const currentCoin = useAppSelector(currentCoinType);
   const isTabletOrMobile = useTabletOrMobile();
   const [showModal, setShowModal] = useState(false);
+  const [insufficient, setInsufficient] = useState(false);
   // const txRef = useRef<Transaction>();
   const [reallyValue, setReallyValue] = useState<number | undefined>(undefined);
   const [reallyValueBigint, setReallyValueBigint] = useState<bigint | undefined>(undefined);
-const onDSViewChange = useCallback((reallyVB: bigint | undefined, value: number | undefined) => {
+const onDSViewChange = useCallback((reallyVB: bigint | undefined, value: number | undefined, resultBalance: bigint | undefined,
+  insufficientBalance: boolean | undefined) => {
     setReallyValue(value);
     setReallyValueBigint(reallyVB);
+    setInsufficient(insufficientBalance || false);
   }, []);
   const suiBalance = useCSuiToSuiPrice(reallyValue || 0, reallyValueBigint || 0n, currentAccount?.address)
   const checkSubmitAble = (): boolean => {
     return (
+      !insufficient &&
       !!currentCoin?.coinUnStakeIn?.type &&
       !!currentCoin?.coinUnStakeOut?.type &&
       (reallyValue == undefined ? 0 : reallyValue) > 0 &&
@@ -109,6 +113,7 @@ const onDSViewChange = useCallback((reallyVB: bigint | undefined, value: number 
               onDSViewChange={onDSViewChange}
               initValue={0}
               onRealTimeChange={onRealTimeChange}
+              maxBalanceAbled={false}
             ></DepositSwapView>
             <div
               style={{
@@ -191,7 +196,7 @@ const onDSViewChange = useCallback((reallyVB: bigint | undefined, value: number 
                     />
                   </ConfigProvider>
                 ) : (
-                  'Unstake'
+                  <div>{insufficient ? 'insufficient balance' : 'Unstake'}</div>
                 )}
               </div>
             )}

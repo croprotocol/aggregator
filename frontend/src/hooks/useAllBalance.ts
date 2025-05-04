@@ -12,7 +12,7 @@ export type AllCoinsBalanceItem = {
   balance: bigint;
   coin?: Coin;
 };
-export const useAllBalance = (address?: string) => {
+export const useAllBalance = (address: string | undefined, inView: boolean) => {
   const client = useSuiClient();
   const queryClient = useQueryClient();
   const sdk = useCroAgSDK();
@@ -50,19 +50,20 @@ export const useAllBalance = (address?: string) => {
             })
           );
         }
-        const item: AllCoinsBalanceItem = {
-          coinType,
-          balance,
-          coin: coin?.data?.[0],
-        };
-        list.push(item);
+        if (coin?.data?.[0] && balance > 0n) {
+          const item: AllCoinsBalanceItem = {
+            coinType,
+            balance,
+            coin: coin?.data?.[0],
+          };
+          list.push(item);
+        }
       }
-
       return list;
     },
-    enabled: !!address,
-    staleTime: 1000 * 20,
-    gcTime: 1000 * 40,
+    enabled: !!address && inView,
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 10,
   });
 };
 

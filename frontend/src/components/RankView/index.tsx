@@ -80,7 +80,7 @@ const RankView: React.FC = () => {
         formatBalance(
           ntfResult.data?.pointsBalance?.balance,
           ntfResult.data?.pointsBalance?.decimals || 0
-        )
+        ) || ''
       )
     );
     setSlider(100);
@@ -133,7 +133,7 @@ const RankView: React.FC = () => {
             formatBalance(
               ntfResult.data?.pointsBalance?.balance,
               ntfResult.data?.pointsBalance?.decimals || 0
-            )
+            ) || ''
           )) /
         100
       ).toFixed(0)
@@ -425,7 +425,7 @@ const RankView: React.FC = () => {
                   ntfResult.data?.nftId?.substr(-3)}
             </div>
             {copyState ? (
-              <CheckCircleOutlined style={{ fontSize: '16px' }} />
+              <CheckCircleOutlined style={{ fontSize: '18px' }} />
             ) : ntfResult.data?.type === 'old' ? (
               <div
                 onClick={(event: React.MouseEvent) => {

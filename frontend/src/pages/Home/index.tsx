@@ -9,17 +9,13 @@ const Home = () => {
   const toRedux = () => router('/toolkit');
   const toQuery = () => router('/query');
   const currentAccount = useCurrentAccount();
-  const all = useAllBalance(currentAccount?.address);
+  // const all = useAllBalance(currentAccount?.address);
   const [balances, setBalances] = useState<Record<string, bigint>>({});
-  useEffect(() => {
-    if (all.isSuccess && Array.isArray(all.data)) {
-      const mapped = all.data.reduce((acc, item) => {
-        acc[item.coinType] = item.balance;
-        return acc;
-      }, {} as Record<string, bigint>);
-      setBalances(mapped);
-    }
-  }, [all, currentAccount?.address]);
+  // useEffect(() => {
+  //   if (all.isSuccess) {
+  //     setBalances(all.data);
+  //   }
+  // }, [all, currentAccount?.address]);
   return (
     <>
       <div>home *</div>

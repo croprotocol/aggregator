@@ -1,15 +1,12 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Avatar,
   ConfigProvider,
-  Drawer,
   Flex,
   Layout,
   Menu,
   MenuProps,
   Modal,
-  Space,
-  Spin,
 } from 'antd';
 import bg_home from '@/assets/bg_home.png';
 import icon_book from '@/assets/icon_book.svg';
@@ -28,9 +25,6 @@ import {
 } from '@mysten/dapp-kit';
 import { useFetchQueryCoinsShow } from '@/hooks/useCoinsShow';
 import Decimal from 'decimal.js';
-import { LeftCircleOutlined, LoadingOutlined } from '@ant-design/icons';
-import { ICON_URL } from '@/config/iconDefaultUrl';
-import { useAllBalance } from '@/hooks';
 import { DrawerAllBalance } from '@/components';
 
 const cx = classNames.bind(styles);
@@ -242,20 +236,6 @@ const AppLayout: React.FC = () => {
     // *******
     // window.location.href = 'https://example.com';
   };
-  const [open, setOpen] = useState(true);
-  const [open1, setOpen1] = useState(false);
-  const handleAfterOpenChange = (visible: boolean) => {
-    if (!visible) {
-      setOpen1(true);
-    }
-  };
-  const handleAfterOpenChange1 = useCallback(() => {
-    (visible: boolean) => {
-      if (!visible) {
-        setOpen(true);
-      }
-    };
-  }, []);
   return (
     <Layout
       className={cx('hide-scrollbar')}
@@ -421,50 +401,7 @@ const AppLayout: React.FC = () => {
           backgroundColor: '#ffffff00',
         }}
       >
-        {/* <Drawer
-          className={cx('wallet')}
-          rootStyle={{
-            boxShadow: 'none !important',
-            height: '70px',
-            zIndex: 100,
-            borderRadius: '8px',
-          }}
-          closeIcon={false}
-          mask={false}
-          maskClosable={false}
-          placement={'left'}
-          width={26}
-          open={open}
-          footer={false}
-          bodyStyle={{
-            overflow: 'hidden !important', // 禁用滚动条
-            padding: 0,
-          }}
-          afterOpenChange={handleAfterOpenChange}
-        >
-          <div
-            className={cx('drawer-content')}
-            onClick={() => {
-              setOpen(false);
-            }}
-          >
-            <div
-              style={{
-                height: '15px',
-                width: '17.5px',
-                backgroundImage: `url(${icon_wallet})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-                flexShrink: 0,
-              }}
-            ></div>
-          </div>
-        </Drawer>
-        <DrawerAllBalance
-          afterOpenChange={handleAfterOpenChange1}
-          open={open1}
-        ></DrawerAllBalance> */}
+        <DrawerAllBalance />
         <Outlet />
       </Content>
       <Footer

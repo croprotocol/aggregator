@@ -38,23 +38,30 @@ const SwapContent: React.FC = () => {
   const isTabletOrMobile = useTabletOrMobile();
   const [showModal, setShowModal] = useState(false); //swap ******
   const [inputTargetValue, setInputTargeValue] = useState(0);
-
+  const [insufficient, setInsufficient] = useState(false);
   const [reallyValue, setReallyValue] = useState<number | undefined>(undefined);
   const [reallyValueBigint, setReallyValueBigint] = useState<
     bigint | undefined
   >(undefined);
   const onDSViewChange = useCallback(
-    (reallyVB: bigint | undefined, value: number | undefined) => {
+    (
+      reallyVB: bigint | undefined,
+      value: number | undefined,
+      resultBalance: bigint | undefined,
+      insufficientBalance: boolean | undefined
+    ) => {
       setReallyValue(value);
       setReallyValueBigint(reallyVB);
       if (value === 0) {
         setInputTargeValue(0);
       }
+      setInsufficient(insufficientBalance || false);
     },
     []
   );
   const checkSubmitAble = (): boolean => {
     return (
+      !insufficient &&
       !!currentCoin?.coinSwapIn?.type &&
       !!currentCoin?.coinSwapOut?.type &&
       (reallyValue == undefined ? 0 : reallyValue) > 0 &&
@@ -128,7 +135,6 @@ const SwapContent: React.FC = () => {
   const onRealTimeChange = useCallback(() => {
     setInputTargeValue(0);
   }, []);
-
   return (
     <>
       {contextHolder}
@@ -140,6 +146,7 @@ const SwapContent: React.FC = () => {
               onDSViewChange={onDSViewChange}
               initValue={0}
               onRealTimeChange={onRealTimeChange}
+              maxBalanceAbled={false}
             ></DepositSwapView>
             <div
               style={{
@@ -225,7 +232,7 @@ const SwapContent: React.FC = () => {
                     />
                   </ConfigProvider>
                 ) : (
-                  'Swap'
+                  <div>{insufficient ? 'insufficient balance' : 'Swap'}</div>
                 )}
               </div>
             )}

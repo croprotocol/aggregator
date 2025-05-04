@@ -22,9 +22,11 @@ export type DepositSwapViewProps = {
   onDSViewChange: (
     reallyValueBigint: bigint | undefined,
     reallyValue: number | undefined,
-    resultBalance: bigint | undefined
+    resultBalance: bigint | undefined,
+    insufficientBalance: boolean | undefined
   ) => void;
   onRealTimeChange: (value: number | undefined) => void;
+  maxBalanceAbled: boolean;
 };
 const DepositSwapView: React.FC<DepositSwapViewProps> = (props) => {
   const currentAccount = useCurrentAccount();
@@ -102,10 +104,11 @@ const DepositSwapView: React.FC<DepositSwapViewProps> = (props) => {
     setInputValue(value);
   };
 
-  const coinBalanceShow = formatBalance(
-    selectBalance?.data?.balance,
-    selectBalance?.data?.decimals
-  );
+  const coinBalanceShow =
+    formatBalance(
+      selectBalance?.data?.balance,
+      selectBalance?.data?.decimals
+    ) || '';
 
   const setSlider = (value: number, voluntarily: boolean) => {
     if (lastUpdatedBy.current === 'slider' && !voluntarily) {
@@ -121,7 +124,7 @@ const DepositSwapView: React.FC<DepositSwapViewProps> = (props) => {
       formatBalance(
         selectBalance?.data?.balance,
         coinByCons(props.viewType, currentCoin)?.decimals
-      )
+      ) || ''
     );
     setInput(v >= maxBalance ? maxBalance : v, true);
     setMaxBalance(formatBalanceMax());
@@ -131,7 +134,7 @@ const DepositSwapView: React.FC<DepositSwapViewProps> = (props) => {
       formatBalance(
         selectBalance?.data?.balance,
         coinByCons(props.viewType, currentCoin)?.decimals
-      )
+      ) || ''
     );
     setInput(v >= maxBalance ? maxBalance : v, true);
   }, [maxBalance]);
@@ -167,7 +170,10 @@ const DepositSwapView: React.FC<DepositSwapViewProps> = (props) => {
   };
   const reallyVB =
     selectBalance?.data?.decimals == undefined
-      ? 0n
+      ? convertToBigInt(
+          coinByCons(props.viewType, currentCoin)?.decimals || 0,
+          String(reallyValue)
+        )
       : convertToBigInt(selectBalance?.data?.decimals, String(reallyValue));
   useEffect(() => {
     if (
@@ -179,7 +185,10 @@ const DepositSwapView: React.FC<DepositSwapViewProps> = (props) => {
         reallyValue,
         selectBalance?.data?.decimals == undefined
           ? undefined
-          : selectBalance?.data?.balance - reallyVB
+          : selectBalance?.data?.balance - reallyVB,
+        selectBalance?.data?.balance == undefined
+          ? undefined
+          : selectBalance?.data?.balance - reallyVB < 0
       );
     } else {
       props.onDSViewChange(
@@ -187,7 +196,10 @@ const DepositSwapView: React.FC<DepositSwapViewProps> = (props) => {
         reallyValue,
         selectBalance?.data?.decimals == undefined
           ? undefined
-          : selectBalance?.data?.balance - reallyVB
+          : selectBalance?.data?.balance - reallyVB,
+        selectBalance?.data?.balance == undefined
+          ? undefined
+          : selectBalance?.data?.balance - reallyVB < 0
       );
     }
   }, [reallyValue]);
@@ -196,7 +208,7 @@ const DepositSwapView: React.FC<DepositSwapViewProps> = (props) => {
       <Flex vertical={false} align="center">
         <SelectCoinBtn
           onComplete={() => {
-            props.onDSViewChange(undefined, undefined, undefined);
+            props.onDSViewChange(undefined, undefined, undefined, undefined);
           }}
           btnType={props.viewType}
         ></SelectCoinBtn>
@@ -216,6 +228,7 @@ const DepositSwapView: React.FC<DepositSwapViewProps> = (props) => {
         }
         onInputChange={onInputChange}
         maxBalance={maxBalance}
+        maxBalanceAbled={props.maxBalanceAbled}
       />
       <div
         className={cx('split')}

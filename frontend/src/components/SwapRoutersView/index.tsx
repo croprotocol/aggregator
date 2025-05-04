@@ -38,7 +38,7 @@ const SwapRoutersView: React.FC<SwapRoutersProps> = (props) => {
     threshold: 0.2, // **** 50% ***，********
     triggerOnce: false, // ************* true
   });
-  const currentAccount = useCurrentAccount();
+  // const currentAccount = useCurrentAccount();
   const swapRouters = useSwapRouters(
     props.from,
     props.target,
@@ -57,7 +57,7 @@ const SwapRoutersView: React.FC<SwapRoutersProps> = (props) => {
         formatBalance(
           swapRouters.data[position]?.routerData.target.amount,
           props.target.decimals
-        ),
+        ) || '',
         swapRouters.data[position]?.tx
       );
     } else if (swapRouters.isLoading) {
@@ -83,7 +83,7 @@ const SwapRoutersView: React.FC<SwapRoutersProps> = (props) => {
         width: '100%',
       }}
     >
-      {currentAccount?.address && (
+      {true && (
         <div className={cx('glass-container', 'agg-list')}>
           {swapRouters.isLoading && (
             <div
@@ -129,10 +129,8 @@ const SwapRoutersView: React.FC<SwapRoutersProps> = (props) => {
           {swapRouters.isSuccess &&
             swapRouters.data.length > 0 &&
             swapRouters.data?.map((croItem, croIndex) => {
-              const balance = formatBalance(
-                croItem.coinOut,
-                props.target.decimals
-              );
+              const balance =
+                formatBalance(croItem.coinOut, props.target.decimals) || '';
               return (
                 <div
                   onClick={() => {
