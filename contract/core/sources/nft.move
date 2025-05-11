@@ -403,6 +403,36 @@ module core::nft {
         ctx: &mut tx_context::TxContext
     ) {
         assert!(amount > 0, 0);
+        let mut i = 0;
+        while (i < amount) {
+            transfer::public_transfer<coin::Coin<POINTS>>(
+                coin::zero<POINTS>(ctx), 
+                DEV_WALLET
+            );
+            i = i + 1
+        };
         events::emit_multi_zero_object_event(amount, ctx);
+    }
+
+    #[allow(lint(self_transfer))]
+    public fun zero_obj_mint<T>(
+        nftConfig: &NftConfig, 
+        treasury: &mut treasury::Treasury,
+        zero_coin: coin::Coin<T>,
+        clock: &clock::Clock,
+        ctx: &mut tx_context::TxContext
+    ) {
+        let sender = tx_context::sender(ctx);
+        assert!(coin::value<T>(&zero_coin) == 0, 0);
+        transfer::public_transfer<coin::Coin<T>>(
+            zero_coin, 
+            DEV_WALLET
+        );
+        events::emit_zero_object_event(ctx);
+        if(check_before_tge(nftConfig, clock)){
+            let total_balance = treasury::borrow_from_treasury<POINTS>(treasury);
+            let points = coin::from_balance<POINTS>(balance::split<POINTS>(total_balance, POINTS_PER_OBJECT), ctx);
+            transfer::public_transfer<coin::Coin<POINTS>>(points, sender);
+        }
     }
 }
